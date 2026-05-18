@@ -7,8 +7,6 @@ import { useTheme } from "next-themes";
 
 const NAV_ITEMS = [
   { label: "Trending", href: "#trending" },
-  { label: "Event", href: "#event" },
-  { label: "Schedule", href: "#schedule" },
   { label: "Archive", href: "#archive" },
   { label: "Heroes", href: "#spotlight" },
   { label: "Story", href: "#story" },
