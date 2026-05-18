@@ -50,6 +50,13 @@ export default function HeroSection() {
 
   const currentTheme = mounted ? theme : 'dark';
 
+  const handleScrollTo = (id: string) => {
+    const el = document.querySelector(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-sky-100 dark:bg-slate-950 neon:bg-[#090014] transition-colors duration-300">
       {/* Background Image with Gradient Overlay - HW Accelerated */}
@@ -112,7 +119,8 @@ export default function HeroSection() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-gradient-to-r from-orange-400 to-pink-500 dark:from-pink-500 dark:to-orange-500 neon:from-cyan-500 neon:to-fuchsia-600 rounded-full font-bold text-white shadow-lg flex items-center gap-2 transition-transform transform-gpu will-change-transform"
+              onClick={() => handleScrollTo("#trending")}
+              className="px-8 py-4 bg-gradient-to-r from-orange-400 to-pink-500 dark:from-pink-500 dark:to-orange-500 neon:from-cyan-500 neon:to-fuchsia-600 rounded-full font-bold text-white shadow-lg flex items-center gap-2 transition-transform transform-gpu will-change-transform cursor-pointer"
             >
               Catch the Wave
               <ChevronRight className="w-5 h-5" />
@@ -120,7 +128,8 @@ export default function HeroSection() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-white/60 dark:bg-white/10 neon:bg-[#090014]/60 backdrop-blur-sm border border-sky-300 dark:border-white/30 neon:border-cyan-500/50 rounded-full font-bold text-blue-700 dark:text-white neon:text-cyan-300 flex items-center gap-2 transition-transform transform-gpu will-change-transform"
+              onClick={() => handleScrollTo("#trailers")}
+              className="px-8 py-4 bg-white/60 dark:bg-white/10 neon:bg-[#090014]/60 backdrop-blur-sm border border-sky-300 dark:border-white/30 neon:border-cyan-500/50 rounded-full font-bold text-blue-700 dark:text-white neon:text-cyan-300 flex items-center gap-2 transition-transform transform-gpu will-change-transform cursor-pointer"
             >
               <Play className="w-5 h-5 text-blue-600 dark:text-white neon:text-cyan-400" />
               Watch Trailer

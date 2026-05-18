@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Maximize2, Sun } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Maximize2, Sun, X, Download } from "lucide-react";
+import { useState } from "react";
 
 const IMAGES = [
   { id: 1, src: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=70&w=1000&auto=format&fit=crop&fm=webp", span: "md:col-span-2 md:row-span-2", height: "h-[500px]" },
@@ -12,6 +13,8 @@ const IMAGES = [
 ];
 
 export default function GallerySection() {
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+
   return (
     <section id="wallpapers" className="py-24 bg-white dark:bg-slate-900 neon:bg-[#12002b] transition-colors duration-300 transform-gpu">
       <div className="container mx-auto px-4">
@@ -43,6 +46,7 @@ export default function GallerySection() {
           </motion.p>
         </div>
 
+        {/* Grid Display */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-min">
           {IMAGES.map((img, index) => (
             <motion.div
@@ -51,6 +55,7 @@ export default function GallerySection() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: index * 0.1, duration: 0.4 }}
+              onClick={() => setActiveImage(img.src)}
               className={`relative rounded-3xl overflow-hidden group cursor-pointer ${img.span} ${img.height} shadow-sm border-4 border-sky-50 dark:border-transparent neon:border-cyan-500/30 transform-gpu`}
             >
               <div className="absolute inset-0 bg-sky-900/10 dark:bg-slate-900/20 neon:bg-[#090014]/40 group-hover:bg-transparent transition-colors duration-300 z-10 pointer-events-none transform-gpu"></div>
@@ -63,13 +68,76 @@ export default function GallerySection() {
               
               <div className="absolute inset-0 bg-white/30 dark:bg-black/50 neon:bg-[#090014]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center justify-center backdrop-blur-sm transform-gpu">
                 <div className="p-4 bg-white/80 dark:bg-white/20 neon:bg-cyan-500/20 rounded-full text-blue-600 dark:text-white neon:text-cyan-300 transform-gpu translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-sm border border-transparent neon:border-cyan-400/50">
-                  <Maximize2 className="w-6 h-6" />
+                  <Maximize2 className="w-6 h-6 animate-pulse" />
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* High-Fidelity Wallpaper Lightbox Overlay Console */}
+      <AnimatePresence>
+        {activeImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-950/95 backdrop-blur-md p-4 md:p-8 cursor-zoom-out"
+            onClick={() => setActiveImage(null)}
+          >
+            {/* Main Lightbox Body Frame */}
+            <motion.div
+              initial={{ scale: 0.9, y: 15, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, y: 15, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 220 }}
+              className="relative max-w-5xl max-h-[75vh] md:max-h-[80vh] rounded-[2rem] overflow-hidden border-4 border-white/10 neon:border-cyan-400 shadow-2xl flex items-center justify-center bg-slate-900"
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image container
+            >
+              {/* Close Button on Image */}
+              <button
+                onClick={() => setActiveImage(null)}
+                className="absolute top-4 right-4 p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white border border-white/20 transition-all hover:scale-105 active:scale-95 cursor-pointer z-50"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <img
+                src={activeImage}
+                alt="Enlarged aesthetic wallpaper"
+                className="w-full h-auto max-h-[75vh] md:max-h-[80vh] object-contain"
+              />
+            </motion.div>
+
+            {/* Utility Download bar at the bottom */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              transition={{ delay: 0.1 }}
+              className="mt-6 flex items-center gap-4 z-50"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <a
+                href={activeImage}
+                target="_blank"
+                rel="noopener noreferrer"
+                download="animewave-summer-wallpaper.jpg"
+                className="px-6 py-3 bg-white hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-900 dark:text-white neon:bg-cyan-950/80 neon:border neon:border-cyan-400 neon:text-cyan-400 font-black rounded-xl text-xs uppercase tracking-wider transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-lg active:scale-95"
+              >
+                <Download className="w-4 h-4" /> Download Full HD Wallpaper
+              </a>
+              <button
+                onClick={() => setActiveImage(null)}
+                className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white border border-white/10 font-black rounded-xl text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer active:scale-95"
+              >
+                Close View
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

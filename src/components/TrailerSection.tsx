@@ -5,7 +5,7 @@ import { Play } from "lucide-react";
 
 export default function TrailerSection() {
   return (
-    <section className="py-24 bg-sky-50 dark:bg-slate-950 neon:bg-[#090014] relative overflow-hidden transition-colors duration-300 transform-gpu">
+    <section id="trailers" className="py-24 bg-sky-50 dark:bg-slate-950 neon:bg-[#090014] relative overflow-hidden transition-colors duration-300 transform-gpu">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-200/30 dark:via-blue-900/10 neon:via-fuchsia-900/10 to-transparent pointer-events-none transition-colors duration-300 transform-gpu translate-z-0"></div>
       
       <div className="container mx-auto px-4 relative z-10">

@@ -47,7 +47,7 @@ export default function SummerCountdown() {
   const currentTheme = mounted ? theme : 'dark';
 
   return (
-    <section className="py-24 bg-sky-200 dark:bg-slate-950 neon:bg-[#090014] relative overflow-hidden flex items-center justify-center transition-colors duration-300 transform-gpu">
+    <section id="event" className="py-24 bg-sky-200 dark:bg-slate-950 neon:bg-[#090014] relative overflow-hidden flex items-center justify-center transition-colors duration-300 transform-gpu">
       {/* Animated Gradient Background - Optimized */}
       <div className="absolute inset-0 z-0 transition-opacity duration-500 transform-gpu translate-z-0">
         <div className={`absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2946&auto=format&fit=crop')] bg-cover bg-center transition-opacity duration-500 transform-gpu ${currentTheme === 'light' ? 'opacity-30' : 'opacity-0'}`}></div>

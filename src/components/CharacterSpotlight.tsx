@@ -1,9 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Zap, Shield, Swords, Heart } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Zap, Shield, Swords, Heart, X, BookOpen, Sparkles, Wand2 } from "lucide-react";
+import { useState } from "react";
 
 export default function CharacterSpotlight() {
+  const [isLoreOpen, setIsLoreOpen] = useState(false);
+
   const stats = [
     { label: "Power", value: 95, icon: Zap, color: "bg-yellow-400 neon:bg-cyan-400" },
     { label: "Defense", value: 75, icon: Shield, color: "bg-blue-400 neon:bg-fuchsia-400" },
@@ -93,13 +96,97 @@ export default function CharacterSpotlight() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="mt-10 px-8 py-4 bg-slate-900 dark:bg-white neon:bg-transparent neon:border-2 neon:border-fuchsia-500 text-white dark:text-slate-900 neon:text-fuchsia-400 rounded-full font-black shadow-lg hover:shadow-xl neon:hover:bg-fuchsia-500 neon:hover:text-[#090014] transition-all uppercase tracking-wider text-sm transform-gpu will-change-transform"
+              onClick={() => setIsLoreOpen(true)}
+              className="mt-10 px-8 py-4 bg-slate-900 dark:bg-white neon:bg-transparent neon:border-2 neon:border-fuchsia-500 text-white dark:text-slate-900 neon:text-fuchsia-400 rounded-full font-black shadow-lg hover:shadow-xl neon:hover:bg-fuchsia-500 neon:hover:text-[#090014] transition-all uppercase tracking-wider text-sm transform-gpu will-change-transform cursor-pointer"
             >
               Read Full Lore
             </motion.button>
           </motion.div>
         </div>
       </div>
+
+      {/* Premium Full Lore Framer Motion Modal Backdrop overlay */}
+      <AnimatePresence>
+        {isLoreOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-hidden"
+          >
+            {/* Modal Body container */}
+            <motion.div
+              initial={{ scale: 0.9, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, y: 20, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 220 }}
+              className="relative w-full max-w-2xl bg-white dark:bg-slate-900 neon:bg-[#0c001f] border-4 border-slate-200 dark:border-slate-800 neon:border-cyan-400/80 rounded-[2.5rem] overflow-hidden shadow-2xl p-6 md:p-8 max-h-[85vh] overflow-y-auto custom-scrollbar"
+            >
+              {/* Close Button X */}
+              <button 
+                onClick={() => setIsLoreOpen(false)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 neon:bg-cyan-950/40 neon:hover:bg-cyan-400 neon:text-cyan-300 neon:hover:text-[#0c001f] text-slate-800 dark:text-white transition-all cursor-pointer z-50 active:scale-90"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Graphic Banner inside modal */}
+              <div className="relative h-48 w-full rounded-2xl overflow-hidden mb-6 border border-slate-350 dark:border-slate-850/50">
+                <img 
+                  src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=70&w=800&auto=format&fit=crop" 
+                  alt="Aiko Tanaka Banner" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 neon:from-[#090014] to-transparent"></div>
+                <div className="absolute bottom-4 left-6">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-yellow-400 neon:text-cyan-300 bg-yellow-400/10 neon:bg-cyan-400/10 px-2.5 py-1 rounded-md border border-yellow-400/20 neon:border-cyan-400/30">LORE DATABASE</span>
+                  <h4 className="text-2xl font-black text-white mt-1">Aiko Tanaka: Codex</h4>
+                </div>
+              </div>
+
+              {/* Main Content of Lore */}
+              <div className="space-y-6 text-slate-800 dark:text-slate-200 neon:text-cyan-50/90 font-medium">
+                <div>
+                  <h5 className="text-sm font-black text-orange-500 dark:text-pink-400 neon:text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
+                    <BookOpen className="w-4 h-4" /> 1. Celestial Beginnings
+                  </h5>
+                  <p className="text-sm leading-relaxed mt-2 pl-5 border-l-2 border-slate-250 dark:border-slate-800 neon:border-cyan-500/30">
+                    Aiko was discovered as an infant inside a glowing meteoroid that impacted the shore of Kyoto during the Summer Eclipse of 2008. Reared by the silent priests of the Solar Shrine, she exhibited high affinity to ambient heat and solar waves, allowing her to mold plasma from a young age.
+                  </p>
+                </div>
+
+                <div>
+                  <h5 className="text-sm font-black text-orange-500 dark:text-pink-400 neon:text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4" /> 2. The Forging of Sunfire
+                  </h5>
+                  <p className="text-sm leading-relaxed mt-2 pl-5 border-l-2 border-slate-250 dark:border-slate-800 neon:border-cyan-500/30">
+                    The Sunfire Blade was not created by mortal blacksmiths. Woven from solar wind particles and forged inside the earth's mantle, the weapon chose Aiko on her fourteenth birthday. It is capable of radiating thermal energy up to 6,000°C—equivalent to the photosphere of the Sun!
+                  </p>
+                </div>
+
+                <div>
+                  <h5 className="text-sm font-black text-orange-500 dark:text-pink-400 neon:text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
+                    <Wand2 className="w-4 h-4" /> 3. Current Quest: Summer Eternal
+                  </h5>
+                  <p className="text-sm leading-relaxed mt-2 pl-5 border-l-2 border-slate-250 dark:border-slate-800 neon:border-cyan-500/30">
+                    Aiko currently travels the ocean shorelines, containing spatial fractures created by the "Frozen Eclipse" sect. Her mission is to gather the scattered shards of the core solar reactor, ensuring that the beautiful summer sky remains warm and active for all eternity.
+                  </p>
+                </div>
+              </div>
+
+              {/* Close Button CTA */}
+              <div className="mt-8 flex justify-end">
+                <button
+                  onClick={() => setIsLoreOpen(false)}
+                  className="px-6 py-3 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 neon:bg-transparent neon:border neon:border-cyan-400 text-white dark:text-slate-900 neon:text-cyan-400 font-black rounded-xl text-xs uppercase tracking-wider transition-colors duration-300 cursor-pointer active:scale-95 shadow-md"
+                >
+                  Close Archive
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
