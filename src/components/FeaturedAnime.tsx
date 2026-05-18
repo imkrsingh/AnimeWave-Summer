@@ -10,7 +10,7 @@ const ANIME_LIST = [
     genre: "Romance / Slice of Life",
     rating: 4.9,
     description: "A breathtaking summer romance unfolding by the ocean side.",
-    image: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=2939&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=70&w=800&auto=format&fit=crop&fm=webp",
   },
   {
     id: 2,
@@ -18,7 +18,7 @@ const ANIME_LIST = [
     genre: "Sci-Fi / Action",
     rating: 4.8,
     description: "In a world ruled by megacorporations, one hacker seeks the ultimate truth.",
-    image: "https://images.unsplash.com/photo-1541562232579-512a21360020?q=80&w=2574&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1541562232579-512a21360020?q=70&w=800&auto=format&fit=crop&fm=webp",
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ const ANIME_LIST = [
     genre: "Supernatural / Mystery",
     rating: 4.7,
     description: "A heartwarming tale of a boy who can see the spirits lingering during the summer festival.",
-    image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=2874&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=70&w=800&auto=format&fit=crop&fm=webp",
   },
   {
     id: 4,
@@ -34,7 +34,7 @@ const ANIME_LIST = [
     genre: "Action / Historical",
     rating: 4.9,
     description: "A disgraced samurai seeks redemption in an era of chaos under the scorching summer sun.",
-    image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=2787&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=70&w=800&auto=format&fit=crop&fm=webp",
   }
 ];
 

@@ -1,11 +1,14 @@
+import dynamic from "next/dynamic";
 import HeroSection from "@/components/HeroSection";
-import FeaturedAnime from "@/components/FeaturedAnime";
-import CharacterSpotlight from "@/components/CharacterSpotlight";
-import SummerRadio from "@/components/SummerRadio";
-import GallerySection from "@/components/GallerySection";
-import TrailerSection from "@/components/TrailerSection";
-import NewsletterFooter from "@/components/NewsletterFooter";
 import { ThemeToggle } from "@/components/ThemeToggle";
+
+// Dynamically load below-the-fold sections for maximum speed and optimization
+const FeaturedAnime = dynamic(() => import("@/components/FeaturedAnime"), { ssr: true });
+const CharacterSpotlight = dynamic(() => import("@/components/CharacterSpotlight"), { ssr: true });
+const SummerRadio = dynamic(() => import("@/components/SummerRadio"), { ssr: true });
+const GallerySection = dynamic(() => import("@/components/GallerySection"), { ssr: true });
+const TrailerSection = dynamic(() => import("@/components/TrailerSection"), { ssr: true });
+const NewsletterFooter = dynamic(() => import("@/components/NewsletterFooter"), { ssr: true });
 
 export default function Home() {
   return (

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { Play, Pause, SkipForward, SkipBack, Volume2, Music, Radio } from "lucide-react";
+import { Play, Pause, SkipForward, SkipBack, Volume2, Music, Radio, Loader2 } from "lucide-react";
 import { useTheme } from "next-themes";
 
 declare global {
@@ -83,6 +83,7 @@ export default function SummerRadio() {
   const [trackDuration, setTrackDuration] = useState("0:00");
   const [volume, setVolume] = useState(70);
   const [iframeReady, setIframeReady] = useState(false);
+  const [isBuffering, setIsBuffering] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const { theme } = useTheme();
@@ -107,12 +108,16 @@ export default function SummerRadio() {
       initPlayer();
     };
 
-    if (window.YT && window.YT.Player) {
-      initPlayer();
-    }
+    // Polling interval to guarantee player initialization across page remounts and hot reloads
+    const initCheck = setInterval(() => {
+      if (window.YT && window.YT.Player) {
+        initPlayer();
+        clearInterval(initCheck);
+      }
+    }, 200);
 
     return () => {
-      // Keep static clean
+      clearInterval(initCheck);
     };
   }, []);
 
@@ -120,8 +125,8 @@ export default function SummerRadio() {
     if (playerRef.current) return;
 
     playerRef.current = new window.YT.Player("youtube-player", {
-      height: "0",
-      width: "0",
+      height: "200",
+      width: "200",
       videoId: TRACKS[currentTrackIndex].url,
       playerVars: {
         autoplay: 0,
@@ -138,10 +143,27 @@ export default function SummerRadio() {
           playerRef.current.setVolume(volume);
         },
         onStateChange: (event: any) => {
-          // YT.PlayerState.ENDED is 0
-          if (event.data === 0) {
+          // YT.PlayerState: -1: UNSTARTED, 0: ENDED, 1: PLAYING, 2: PAUSED, 3: BUFFERING, 5: CUED
+          if (event.data === 3) {
+            setIsBuffering(true);
+          } else if (event.data === 1) {
+            setIsBuffering(false);
+            setIsPlaying(true);
+          } else if (event.data === 2) {
+            setIsBuffering(false);
+            setIsPlaying(false);
+          } else if (event.data === 0) {
+            setIsBuffering(false);
             handleNext();
+          } else if (event.data === 5 || event.data === -1) {
+            // Cued or Unstarted means it's ready but not actively playing/buffering. Clear visual spinner!
+            setIsBuffering(false);
           }
+        },
+        onError: (err: any) => {
+          console.error("YouTube Player Error:", err);
+          setIsBuffering(false);
+          setIsPlaying(false);
         }
       }
     });
@@ -154,9 +176,10 @@ export default function SummerRadio() {
     if (isPlaying) {
       playerRef.current.pauseVideo();
       setIsPlaying(false);
+      setIsBuffering(false);
     } else {
+      setIsBuffering(true); // Pre-emptively show buffer while YT wakes up
       playerRef.current.playVideo();
-      setIsPlaying(true);
     }
   };
 
@@ -170,14 +193,15 @@ export default function SummerRadio() {
   // Sync track selection / swaps
   useEffect(() => {
     if (playerRef.current && iframeReady && typeof playerRef.current.loadVideoById === 'function') {
-      playerRef.current.currentTime = 0;
       setProgress(0);
       setCurrentTime("0:00");
-      playerRef.current.loadVideoById(TRACKS[currentTrackIndex].url);
+      setIsBuffering(true); // Trigger loading/buffering visually immediately
+      
       if (isPlaying) {
-        playerRef.current.playVideo();
+        playerRef.current.loadVideoById(TRACKS[currentTrackIndex].url);
       } else {
-        playerRef.current.pauseVideo();
+        playerRef.current.cueVideoById(TRACKS[currentTrackIndex].url);
+        setIsBuffering(false); // No buffer spinner if track is swapped while paused
       }
     }
   }, [currentTrackIndex, iframeReady]);
@@ -204,27 +228,27 @@ export default function SummerRadio() {
   }, [isPlaying, currentTrackIndex, iframeReady]);
 
   const handleNext = () => {
-    setIsPlaying(false);
     setProgress(0);
     setCurrentTime("0:00");
+    setIsBuffering(true);
     setCurrentTrackIndex((prev) => (prev + 1) % TRACKS.length);
-    setTimeout(() => setIsPlaying(true), 200);
+    setIsPlaying(true);
   };
 
   const handlePrev = () => {
-    setIsPlaying(false);
     setProgress(0);
     setCurrentTime("0:00");
+    setIsBuffering(true);
     setCurrentTrackIndex((prev) => (prev - 1 + TRACKS.length) % TRACKS.length);
-    setTimeout(() => setIsPlaying(true), 200);
+    setIsPlaying(true);
   };
 
   const handleTrackSelect = (index: number) => {
-    setIsPlaying(false);
     setProgress(0);
     setCurrentTime("0:00");
+    setIsBuffering(true);
     setCurrentTrackIndex(index);
-    setTimeout(() => setIsPlaying(true), 200);
+    setIsPlaying(true);
   };
 
   const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -242,8 +266,10 @@ export default function SummerRadio() {
 
   return (
     <section className="py-24 bg-sky-200 dark:bg-slate-950 neon:bg-[#090014] relative overflow-hidden flex items-center justify-center transition-colors duration-300 transform-gpu">
-      {/* Hidden YouTube Iframe Node */}
-      <div id="youtube-player" className="absolute w-0 h-0 opacity-0 pointer-events-none"></div>
+      {/* Hidden YouTube Iframe Node - Offscreen rendering to allow active buffering */}
+      <div className="absolute left-[-9999px] top-[-9999px]">
+        <div id="youtube-player"></div>
+      </div>
 
       {/* Background gradients */}
       <div className="absolute inset-0 z-0 pointer-events-none transform-gpu">
@@ -320,11 +346,17 @@ export default function SummerRadio() {
               </div>
 
               <div className="mt-8 text-center">
-                <span className="text-orange-500 dark:text-pink-400 neon:text-cyan-400 font-bold uppercase tracking-wider text-xs">
+                <span className="text-orange-500 dark:text-pink-400 neon:text-cyan-400 font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2">
                   {currentTrack.genre}
+                  {isBuffering && (
+                    <span className="inline-flex h-2 w-2 rounded-full bg-cyan-400 animate-ping"></span>
+                  )}
                 </span>
-                <h3 className="text-2xl font-black text-slate-900 dark:text-white neon:text-cyan-50 mt-1 leading-tight">
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white neon:text-cyan-50 mt-1 leading-tight flex items-center justify-center gap-2">
                   {currentTrack.title}
+                  {isBuffering && (
+                    <span className="text-xs font-bold text-cyan-400/80 animate-pulse">(Buffering...)</span>
+                  )}
                 </h3>
                 <p className="text-slate-600 dark:text-slate-400 neon:text-cyan-200/70 text-sm mt-1">
                   {currentTrack.artist}
@@ -362,7 +394,7 @@ export default function SummerRadio() {
               <div className="mb-8">
                 <div className="flex justify-between text-xs text-slate-600 dark:text-slate-400 neon:text-cyan-200/50 font-bold mb-2">
                   <span>{currentTime}</span>
-                  <span>{trackDuration !== "0:00" ? trackDuration : currentTrack.duration}</span>
+                  <span>{trackDuration && trackDuration !== "0:00" && trackDuration !== "0:01" ? trackDuration : currentTrack.duration}</span>
                 </div>
                 <div 
                   onClick={handleProgressBarClick}
@@ -406,9 +438,15 @@ export default function SummerRadio() {
 
                   <button
                     onClick={handlePlayPause}
-                    className={`p-5 rounded-full text-white bg-gradient-to-r ${currentTrack.color} shadow-lg hover:scale-105 active:scale-95 transition-all transform-gpu`}
+                    className={`p-5 rounded-full text-white bg-gradient-to-r ${currentTrack.color} shadow-lg hover:scale-105 active:scale-95 transition-all transform-gpu flex items-center justify-center`}
                   >
-                    {isPlaying ? <Pause className="w-8 h-8 fill-current" /> : <Play className="w-8 h-8 fill-current ml-1" />}
+                    {isBuffering ? (
+                      <Loader2 className="w-8 h-8 animate-spin" />
+                    ) : isPlaying ? (
+                      <Pause className="w-8 h-8 fill-current" />
+                    ) : (
+                      <Play className="w-8 h-8 fill-current ml-1" />
+                    )}
                   </button>
 
                   <button 

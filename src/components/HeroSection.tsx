@@ -57,10 +57,10 @@ export default function HeroSection() {
         className="absolute inset-0 z-0 bg-cover bg-center transition-all duration-500 transform-gpu"
         style={{ 
           backgroundImage: currentTheme === 'light'
-            ? 'url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2946&auto=format&fit=crop")' 
+            ? 'url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=70&w=1920&auto=format&fit=crop&fm=webp")' 
             : currentTheme === 'neon'
-            ? 'url("https://images.unsplash.com/photo-1541562232579-512a21360020?q=80&w=2574&auto=format&fit=crop")'
-            : 'url("https://images.unsplash.com/photo-1613376023733-0a73315d9b06?q=80&w=2940&auto=format&fit=crop")'
+            ? 'url("https://images.unsplash.com/photo-1541562232579-512a21360020?q=70&w=1920&auto=format&fit=crop&fm=webp")'
+            : 'url("https://images.unsplash.com/photo-1613376023733-0a73315d9b06?q=70&w=1920&auto=format&fit=crop&fm=webp")'
         }}
       >
         {/* Dark Mode Gradient */}

@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 import { Maximize2, Sun } from "lucide-react";
 
 const IMAGES = [
-  { id: 1, src: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=2787&auto=format&fit=crop", span: "md:col-span-2 md:row-span-2", height: "h-[500px]" },
-  { id: 2, src: "https://images.unsplash.com/photo-1541562232579-512a21360020?q=80&w=2574&auto=format&fit=crop", span: "md:col-span-1 md:row-span-1", height: "h-[240px]" },
-  { id: 3, src: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=2874&auto=format&fit=crop", span: "md:col-span-1 md:row-span-1", height: "h-[240px]" },
-  { id: 4, src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2784&auto=format&fit=crop", span: "md:col-span-1 md:row-span-1", height: "h-[240px]" },
-  { id: 5, src: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=2939&auto=format&fit=crop", span: "md:col-span-1 md:row-span-1", height: "h-[240px]" },
+  { id: 1, src: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=70&w=1000&auto=format&fit=crop&fm=webp", span: "md:col-span-2 md:row-span-2", height: "h-[500px]" },
+  { id: 2, src: "https://images.unsplash.com/photo-1541562232579-512a21360020?q=70&w=500&auto=format&fit=crop&fm=webp", span: "md:col-span-1 md:row-span-1", height: "h-[240px]" },
+  { id: 3, src: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=70&w=500&auto=format&fit=crop&fm=webp", span: "md:col-span-1 md:row-span-1", height: "h-[240px]" },
+  { id: 4, src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=70&w=500&auto=format&fit=crop&fm=webp", span: "md:col-span-1 md:row-span-1", height: "h-[240px]" },
+  { id: 5, src: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=70&w=500&auto=format&fit=crop&fm=webp", span: "md:col-span-1 md:row-span-1", height: "h-[240px]" },
 ];
 
 export default function GallerySection() {

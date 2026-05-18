@@ -32,7 +32,7 @@ export default function CharacterSpotlight() {
             <div className="absolute -inset-4 bg-gradient-to-tr from-yellow-400 to-orange-500 dark:from-pink-500 dark:to-orange-500 neon:from-cyan-500 neon:to-fuchsia-600 rounded-[3rem] opacity-40 dark:opacity-30 neon:opacity-50 blur-[40px] transform-gpu translate-z-0 pointer-events-none"></div>
             <div className="relative h-[600px] w-full rounded-[2.5rem] overflow-hidden border-4 border-white dark:border-white/10 neon:border-cyan-400/40 shadow-xl transform-gpu">
               <img 
-                src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2784&auto=format&fit=crop" 
+                src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=70&w=800&auto=format&fit=crop&fm=webp" 
                 alt="Character Spotlight" 
                 loading="lazy"
                 className="w-full h-full object-cover transform-gpu hover:scale-105 transition-transform duration-700 will-change-transform"
