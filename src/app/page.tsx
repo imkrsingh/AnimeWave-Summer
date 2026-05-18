@@ -7,6 +7,7 @@ const LegacyHub = dynamic(() => import("@/components/LegacyHub"), { ssr: true })
 const CharacterSpotlight = dynamic(() => import("@/components/CharacterSpotlight"), { ssr: true });
 const SummerChronicles = dynamic(() => import("@/components/SummerChronicles"), { ssr: true });
 const SummerRadio = dynamic(() => import("@/components/SummerRadio"), { ssr: true });
+const NostalgiaSoundboard = dynamic(() => import("@/components/NostalgiaSoundboard"), { ssr: true });
 const GallerySection = dynamic(() => import("@/components/GallerySection"), { ssr: true });
 const TrailerSection = dynamic(() => import("@/components/TrailerSection"), { ssr: true });
 const NewsletterFooter = dynamic(() => import("@/components/NewsletterFooter"), { ssr: true });
@@ -20,6 +21,7 @@ export default function Home() {
       <CharacterSpotlight />
       <SummerChronicles />
       <SummerRadio />
+      <NostalgiaSoundboard />
       <GallerySection />
       <TrailerSection />
       <NewsletterFooter />

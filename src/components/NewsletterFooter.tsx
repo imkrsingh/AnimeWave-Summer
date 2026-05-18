@@ -55,13 +55,50 @@ export default function NewsletterFooter() {
           </p>
 
           <div className="flex items-center gap-4">
-            {[Globe, MessageCircle, Share2, Camera].map((Icon, i) => (
+            {[
+              {
+                title: "Portfolio",
+                href: "#",
+                svg: (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                )
+              },
+              {
+                title: "Instagram",
+                href: "https://instagram.com",
+                svg: (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                )
+              },
+              {
+                title: "YouTube",
+                href: "https://youtube.com",
+                svg: (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                )
+              },
+              {
+                title: "Share",
+                href: "#",
+                svg: (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                )
+              },
+              {
+                title: "More Links",
+                href: "#",
+                svg: (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                )
+              }
+            ].map((item, i) => (
               <a 
                 key={i} 
-                href="#" 
+                href={item.href} 
+                title={item.title}
                 className="w-12 h-12 rounded-full bg-white dark:bg-slate-900 neon:bg-transparent border-2 border-sky-100 dark:border-slate-800 neon:border-cyan-500/50 flex items-center justify-center text-blue-500 dark:text-slate-400 neon:text-cyan-400 hover:text-white hover:bg-orange-500 hover:border-orange-500 dark:hover:bg-pink-500 dark:hover:border-pink-500 neon:hover:bg-fuchsia-500 neon:hover:border-fuchsia-500 neon:hover:text-white transition-colors duration-300 shadow-sm"
               >
-                <Icon className="w-5 h-5" />
+                {item.svg}
               </a>
             ))}
           </div>
