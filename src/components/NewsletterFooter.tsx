@@ -1,0 +1,72 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Send, Globe, MessageCircle, Share2, Camera } from "lucide-react";
+
+export default function NewsletterFooter() {
+  return (
+    <footer className="relative bg-sky-200 dark:bg-slate-950 neon:bg-[#090014] pt-24 pb-12 overflow-hidden transition-colors duration-300 transform-gpu">
+      {/* Decorative gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-yellow-200/50 dark:to-pink-900/20 neon:to-fuchsia-900/30 pointer-events-none transition-colors duration-300 transform-gpu translate-z-0"></div>
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5 }}
+          className="max-w-4xl mx-auto bg-white/70 dark:bg-slate-900/50 neon:bg-[#12002b]/60 backdrop-blur-md border-4 border-white dark:border-white/10 neon:border-cyan-400/40 rounded-[3rem] p-8 md:p-16 text-center shadow-xl mb-24 relative overflow-hidden transition-colors duration-300 transform-gpu"
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-orange-400/20 dark:bg-pink-500/10 neon:bg-fuchsia-500/20 rounded-full blur-[60px] pointer-events-none transform-gpu translate-z-0"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-400/20 dark:bg-cyan-500/10 neon:bg-cyan-500/20 rounded-full blur-[60px] pointer-events-none transform-gpu translate-z-0"></div>
+
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white neon:text-cyan-50 mb-4 relative z-10">
+            Don't miss an <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-500 dark:from-pink-400 dark:to-orange-400 neon:from-cyan-400 neon:to-fuchsia-500">Episode</span>
+          </h2>
+          <p className="text-slate-700 dark:text-slate-400 neon:text-cyan-100/70 mb-8 max-w-xl mx-auto text-lg relative z-10 font-medium">
+            Subscribe to our newsletter and get exclusive summer updates, behind-the-scenes content, and early access to beach merchandise.
+          </p>
+
+          <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto relative z-10" onSubmit={(e) => e.preventDefault()}>
+            <input 
+              type="email" 
+              placeholder="Enter your email address" 
+              className="flex-1 bg-white dark:bg-slate-950/50 neon:bg-[#090014]/80 border-2 border-sky-200 dark:border-slate-700 neon:border-fuchsia-500/50 rounded-full px-6 py-4 text-slate-900 dark:text-white neon:text-cyan-50 placeholder:text-slate-400 dark:placeholder:text-slate-500 neon:placeholder:text-cyan-200/50 focus:outline-none focus:border-orange-500 dark:focus:border-pink-500 neon:focus:border-cyan-400 focus:ring-2 focus:ring-orange-200 dark:focus:ring-pink-500 transition-colors font-medium shadow-inner"
+              required
+            />
+            <button 
+              type="submit"
+              className="px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 dark:from-pink-500 dark:to-orange-500 neon:from-cyan-400 neon:to-fuchsia-600 rounded-full font-black text-white shadow-md hover:shadow-lg transition-shadow flex items-center justify-center gap-2 uppercase tracking-wider text-sm transform-gpu will-change-transform active:scale-95"
+            >
+              Subscribe <Send className="w-4 h-4" />
+            </button>
+          </form>
+        </motion.div>
+
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-t-2 border-sky-300/50 dark:border-white/10 neon:border-cyan-500/30 pt-8 transition-colors duration-300">
+          <div className="flex items-center gap-2">
+            <span className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-500 dark:from-pink-400 dark:to-orange-400 neon:from-cyan-400 neon:to-fuchsia-500">
+              ANIME<span className="text-blue-600 dark:text-white neon:text-cyan-50">WAVE</span>
+            </span>
+          </div>
+
+          <p className="text-slate-600 dark:text-slate-500 neon:text-cyan-200/50 text-sm font-bold">
+            &copy; 2026 AnimeWave Studio. All rights reserved.
+          </p>
+
+          <div className="flex items-center gap-4">
+            {[Globe, MessageCircle, Share2, Camera].map((Icon, i) => (
+              <a 
+                key={i} 
+                href="#" 
+                className="w-12 h-12 rounded-full bg-white dark:bg-slate-900 neon:bg-transparent border-2 border-sky-100 dark:border-slate-800 neon:border-cyan-500/50 flex items-center justify-center text-blue-500 dark:text-slate-400 neon:text-cyan-400 hover:text-white hover:bg-orange-500 hover:border-orange-500 dark:hover:bg-pink-500 dark:hover:border-pink-500 neon:hover:bg-fuchsia-500 neon:hover:border-fuchsia-500 neon:hover:text-white transition-colors duration-300 shadow-sm"
+              >
+                <Icon className="w-5 h-5" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
