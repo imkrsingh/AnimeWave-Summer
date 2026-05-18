@@ -7,11 +7,14 @@ import { useTheme } from "next-themes";
 
 const NAV_ITEMS = [
   { label: "Trending", href: "#trending" },
+  { label: "Event", href: "#event" },
+  { label: "Schedule", href: "#schedule" },
   { label: "Archive", href: "#archive" },
-  { label: "Spotlight", href: "#spotlight" },
+  { label: "Heroes", href: "#spotlight" },
   { label: "Story", href: "#story" },
   { label: "Radio", href: "#radio" },
-  { label: "Wallpapers", href: "#wallpapers" }
+  { label: "Quiz", href: "#quiz" },
+  { label: "Gallery", href: "#wallpapers" }
 ];
 
 export default function FloatingNavbar() {
@@ -101,7 +104,7 @@ export default function FloatingNavbar() {
                   key={item.label}
                   href={item.href}
                   onClick={(e) => handleScrollTo(e, item.href)}
-                  className={`relative px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                  className={`relative px-2.5 lg:px-3.5 py-1.5 rounded-full text-[10px] lg:text-xs font-black uppercase tracking-wider transition-all duration-300 cursor-pointer whitespace-nowrap ${
                     isActive
                       ? "text-slate-950 dark:text-white neon:text-cyan-300"
                       : "text-slate-700 dark:text-slate-400 neon:text-cyan-400/60 hover:text-slate-950 dark:hover:text-white neon:hover:text-cyan-300"
