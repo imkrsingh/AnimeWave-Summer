@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import FloatingNavbar from "@/components/FloatingNavbar";
+import CursorFollower from "@/components/CursorFollower";
 
 const outfit = Outfit({ 
   subsets: ["latin"],
@@ -30,6 +32,8 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <FloatingNavbar />
+          <CursorFollower />
           {children}
         </ThemeProvider>
       </body>

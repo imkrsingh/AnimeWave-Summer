@@ -265,7 +265,7 @@ export default function SummerRadio() {
   };
 
   return (
-    <section className="py-24 bg-sky-200 dark:bg-slate-950 neon:bg-[#090014] relative overflow-hidden flex items-center justify-center transition-colors duration-300 transform-gpu">
+    <section id="radio" className="py-24 bg-sky-200 dark:bg-slate-950 neon:bg-[#090014] relative overflow-hidden flex items-center justify-center transition-colors duration-300 transform-gpu">
       {/* Hidden YouTube Iframe Node - Offscreen rendering to allow active buffering */}
       <div className="absolute left-[-9999px] top-[-9999px]">
         <div id="youtube-player"></div>

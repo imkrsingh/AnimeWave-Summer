@@ -12,7 +12,7 @@ export default function CharacterSpotlight() {
   ];
 
   return (
-    <section className="py-24 bg-sky-100 dark:bg-slate-900 neon:bg-[#090014] relative overflow-hidden transition-colors duration-300 transform-gpu">
+    <section id="spotlight" className="py-24 bg-sky-100 dark:bg-slate-900 neon:bg-[#090014] relative overflow-hidden transition-colors duration-300 transform-gpu">
       {/* Background elements */}
       <div className="absolute inset-0 z-0 opacity-10 dark:opacity-20 neon:opacity-30 pointer-events-none transform-gpu" style={{
         backgroundImage: 'radial-gradient(circle at 50% 50%, #475569 2px, transparent 2px)',

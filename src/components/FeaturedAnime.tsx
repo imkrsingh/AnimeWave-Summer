@@ -40,7 +40,7 @@ const ANIME_LIST = [
 
 export default function FeaturedAnime() {
   return (
-    <section className="py-24 bg-white dark:bg-slate-950 neon:bg-[#090014] relative overflow-hidden transition-colors duration-300">
+    <section id="trending" className="py-24 bg-white dark:bg-slate-950 neon:bg-[#090014] relative overflow-hidden transition-colors duration-300">
       {/* Decorative background elements - optimized with transform-gpu and smaller blur */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-300/30 dark:bg-pink-600/10 neon:bg-fuchsia-600/20 rounded-full blur-[80px] pointer-events-none transform-gpu translate-z-0"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-300/30 dark:bg-blue-600/10 neon:bg-cyan-600/20 rounded-full blur-[80px] pointer-events-none transform-gpu translate-z-0"></div>

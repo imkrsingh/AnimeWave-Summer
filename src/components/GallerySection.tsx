@@ -13,7 +13,7 @@ const IMAGES = [
 
 export default function GallerySection() {
   return (
-    <section className="py-24 bg-white dark:bg-slate-900 neon:bg-[#12002b] transition-colors duration-300 transform-gpu">
+    <section id="wallpapers" className="py-24 bg-white dark:bg-slate-900 neon:bg-[#12002b] transition-colors duration-300 transform-gpu">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 transform-gpu">
           <motion.div
