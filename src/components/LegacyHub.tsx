@@ -386,6 +386,250 @@ const LEGENDARY_ANIME: AnimeItem[] = [
 
 const INITIAL_LIMIT = 8;
 
+// Separate, isolated card component to optimize performance and prevent re-rendering grid
+function LegacyAnimeCard({ anime }: { anime: AnimeItem }) {
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    
+    // Mouse coordinates relative to card center (for 3D tilt)
+    const mouseX = e.clientX - rect.left - width / 2;
+    const mouseY = e.clientY - rect.top - height / 2;
+    
+    // Map to max tilt angle of 12 degrees for responsive 3D effect
+    const rX = -(mouseY / (height / 2)) * 12;
+    const rY = (mouseX / (width / 2)) * 12;
+    
+    setCoords({ x: rX, y: rY });
+
+    // Mouse coordinates as percentages (for reflection light)
+    const pX = ((e.clientX - rect.left) / width) * 100;
+    const pY = ((e.clientY - rect.top) / height) * 100;
+    
+    setMousePos({ x: pX, y: pY });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setCoords({ x: 0, y: 0 }); // Smoothly reset tilt back to zero
+    setMousePos({ x: 50, y: 50 }); // Reset light flare to center
+  };
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+      className="w-full h-[330px]"
+    >
+      {/* 3D TILT WRAPPER - Dynamic Hardware-Accelerated 3D Transform */}
+      <div
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="w-full h-full perspective-1000 transition-all duration-200 ease-out transform-gpu cursor-pointer"
+        style={{
+          transform: isHovered 
+            ? `perspective(1000px) rotateX(${coords.x}deg) rotateY(${coords.y}deg) scale3d(1.05, 1.05, 1.05)`
+            : `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`,
+          transformStyle: "preserve-3d"
+        }}
+      >
+        {/* INNER WRAPPER (FLIPS 180 DEGREES SMOOTHLY ON MOUSE ENTER) */}
+        <div 
+          className={`relative w-full h-full duration-700 preserve-3d transition-transform ${
+            isHovered ? "rotate-y-180" : ""
+          } select-none`}
+        >
+          
+          {/* FRONT SIDE (HOLOGRAPHIC FOIL LIMITED EDITION POSTER WITH GLASS DETAILS) */}
+          <div className="absolute inset-0 w-full h-full rounded-3xl overflow-hidden border-2 backface-hidden shadow-md flex flex-col justify-between transform-gpu
+            bg-white/90 border-slate-250
+            dark:bg-slate-900/95 dark:border-slate-855 
+            neon:bg-[#12002b]/95 neon:border-cyan-500/20"
+          >
+            {/* Glowing outer frame halo under card */}
+            <div className={`absolute -inset-0.5 bg-gradient-to-tr ${anime.gradient} rounded-3xl opacity-35 blur-md pointer-events-none transform-gpu translate-z-0`} />
+
+            {/* Cyber futuristic tech corner indicators ([+]) */}
+            <div className="absolute top-2 left-2 text-[9px] text-slate-400 dark:text-white/35 neon:text-white/35 font-mono pointer-events-none z-20 font-black tracking-tighter">[+]</div>
+            <div className="absolute top-2 right-2 text-[9px] text-slate-400 dark:text-white/35 neon:text-white/35 font-mono pointer-events-none z-20 font-black tracking-tighter">[+]</div>
+
+            {/* Background poster image (uses MyAnimeList CDN!) */}
+            <div
+              className="absolute inset-0 w-full h-full bg-cover bg-top select-none transition-transform duration-700 ease-out"
+              style={{ backgroundImage: `url(${anime.image})` }}
+            />
+            
+            {/* Holographic metallic sheen (simulates rare foil reflection sweep on hover) */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out z-20 pointer-events-none" />
+
+            {/* 🌈 DYNAMIC HOLOGRAPHIC LIGHT FLARE (Follows cursor position using mix-blend-color-dodge!) */}
+            <div
+              className="absolute inset-0 z-15 pointer-events-none mix-blend-color-dodge transition-opacity duration-300"
+              style={{
+                opacity: isHovered ? 1 : 0,
+                background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, 
+                  rgba(255, 255, 255, 0.45) 0%, 
+                  rgba(255, 182, 193, 0.18) 25%, 
+                  rgba(135, 206, 250, 0.12) 50%, 
+                  rgba(255, 255, 255, 0) 80%)`
+              }}
+            />
+
+            {/* Dark gradient mask to overlay text nicely */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-transparent z-10 pointer-events-none" />
+
+            {/* Top row overlays */}
+            <div className="relative z-20 p-4 flex items-center justify-between w-full">
+              {/* Futuristic Glass Card Number Tag */}
+              <div className="bg-slate-900/10 dark:bg-black/40 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-slate-900/10 dark:border-white/20 text-[10px] font-mono font-black tracking-widest text-slate-900 dark:text-white shadow-md">
+                #{anime.id.toString().padStart(2, "0")}
+              </div>
+
+              {/* Floating Rating Glass Tag */}
+              <div className="flex items-center gap-1 bg-slate-900/10 dark:bg-black/40 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-slate-900/10 dark:border-white/20 shadow-md text-slate-900 dark:text-white text-[10px] font-black tracking-wider">
+                <Star className="w-3 h-3 text-yellow-500 dark:text-yellow-400 fill-current" />
+                {anime.rating}
+              </div>
+            </div>
+
+            {/* Bottom Glass Title Console (Floating seesha panel at the bottom of the card) */}
+            <div className="relative z-20 m-3 p-3 text-left rounded-2xl bg-black/55 dark:bg-black/55 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+              <span className={`text-[8px] font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient} bg-black/60 px-2 py-0.5 rounded-md border border-white/10 shadow-sm`}>
+                {anime.category === "Classics" ? "Shonen Legend" : anime.category === "Modern" ? "Modern Giant" : "Childhood Classic"}
+              </span>
+              
+              {/* Title */}
+              <h3 className="text-base font-black text-white leading-tight mt-1.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                {anime.title}
+              </h3>
+              
+              {/* Interactive hint */}
+              <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] text-white/50 font-bold uppercase tracking-widest">
+                <span>#{anime.id.toString().padStart(2, "0")} ARCHIVE</span>
+                <span className={`text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient} font-black group-hover:scale-105 transition-transform flex items-center gap-1 animate-pulse`}>
+                  Flip Card <Sparkles className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* BACK SIDE (VIBRANT STYLISH GLASS SEESHA DECK PANEL WITH MOUSE TILT & LIGHT FLARE) */}
+          <div className="absolute inset-0 w-full h-full rounded-3xl overflow-hidden p-5 rotate-y-180 backface-hidden shadow-2xl flex flex-col justify-between border backdrop-blur-xl transform-gpu transition-all duration-300
+            bg-white/60 border-white/40 
+            dark:bg-slate-950/45 dark:border-white/10 
+            neon:bg-[#12002b]/40 neon:border-cyan-500/30"
+          >
+            {/* Glowing background brand color accent bar */}
+            <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${anime.gradient}`} />
+            
+            {/* Large Subtle Glowing Rank Watermark in background */}
+            <div className="absolute right-4 bottom-16 text-6xl font-black opacity-[0.03] dark:opacity-[0.05] neon:opacity-[0.08] select-none pointer-events-none font-mono uppercase tracking-tighter">
+              {anime.rank}
+            </div>
+
+            {/* 🌟 DYNAMIC BACK-SIDE GLASS REFLECTION SHINE (Follows cursor position smoothly!) */}
+            <div
+              className="absolute inset-0 z-15 pointer-events-none mix-blend-color-dodge transition-opacity duration-300"
+              style={{
+                opacity: isHovered ? 1 : 0,
+                background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, 
+                  rgba(255, 255, 255, 0.35) 0%, 
+                  rgba(255, 255, 255, 0) 70%)`
+              }}
+            />
+
+            {/* Tech Corner Crosshairs on back side */}
+            <div className="absolute top-2 left-2 text-[8px] text-slate-400 dark:text-white/20 neon:text-cyan-500/20 font-mono pointer-events-none z-20 font-black">[+]</div>
+            <div className="absolute top-2 right-2 text-[8px] text-slate-400 dark:text-white/20 neon:text-cyan-500/20 font-mono pointer-events-none z-20 font-black">[+]</div>
+
+            {/* Backdrop decorative organic gradient glows */}
+            <div className={`absolute -right-10 -top-10 w-28 h-28 rounded-full bg-gradient-to-tr ${anime.gradient} opacity-10 dark:opacity-15 neon:opacity-20 blur-xl pointer-events-none`} />
+            <div className={`absolute -left-10 -bottom-10 w-28 h-28 rounded-full bg-gradient-to-tr ${anime.gradient} opacity-10 dark:opacity-15 neon:opacity-20 blur-xl pointer-events-none`} />
+
+            <div className="relative z-10 flex flex-col h-full justify-between">
+              {/* Header */}
+              <div>
+                <div className="flex items-center justify-between mb-2.5">
+                  <div className="flex items-center gap-1.5">
+                    {/* Futuristic glowing Flame icon badge inside frosted glass bezel */}
+                    <div className={`w-8 h-8 rounded-lg bg-gradient-to-tr ${anime.gradient} flex items-center justify-center text-white shadow-md border border-white/25`}>
+                      <Flame className="w-4 h-4 text-white fill-current animate-pulse" />
+                    </div>
+                    <span className="text-[8px] font-mono font-black uppercase px-2 py-0.5 rounded bg-slate-900/10 dark:bg-black/40 neon:bg-[#090014]/50 text-slate-800 dark:text-slate-350 neon:text-cyan-300 border border-slate-900/10 dark:border-white/10 neon:border-cyan-555/20">
+                      {anime.rank}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center gap-1 bg-slate-900/10 dark:bg-black/40 neon:bg-[#090014]/50 px-2 py-0.5 rounded-full border border-slate-900/10 dark:border-white/10 neon:border-cyan-500/20 text-slate-855 dark:text-slate-300 neon:text-cyan-300 text-[9px] font-black tracking-wider uppercase">
+                    <Star className="w-3 h-3 text-yellow-500 dark:text-yellow-400 neon:text-cyan-400 fill-current" />
+                    {anime.rating}
+                  </div>
+                </div>
+
+                {/* Title - Glowing Brand Gradient */}
+                <h4 className={`text-base font-black leading-tight mb-2 text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient}`}>
+                  {anime.title}
+                </h4>
+
+                {/* Metadata tags */}
+                <div className="flex items-center gap-1.5 flex-wrap mb-2.5 select-none">
+                  <span className="text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-slate-900/10 dark:bg-black/40 neon:bg-[#090014]/50 text-slate-750 dark:text-slate-350 neon:text-cyan-455 border border-slate-900/10 dark:border-white/10 neon:border-cyan-550/10">
+                    {anime.genre}
+                  </span>
+                  <span className="text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-slate-900/10 dark:bg-black/40 neon:bg-[#090014]/50 text-slate-605 dark:text-slate-450 neon:text-cyan-300/40 border border-slate-900/10 dark:border-white/10 neon:border-cyan-555/10">
+                    {anime.year}
+                  </span>
+                </div>
+
+                {/* Detailed Description Tagline */}
+                <p className="text-slate-855 dark:text-slate-200 neon:text-cyan-100/80 text-[11px] leading-relaxed font-bold mb-3">
+                  {anime.tagline}
+                </p>
+
+                {/* 💎 FUTURISTIC CHARACTER BRAND STAT BADGE (Glass Console style) */}
+                <div className="p-2 bg-slate-900/5 dark:bg-black/35 neon:bg-[#090014]/65 rounded-xl border border-slate-900/10 dark:border-white/10 neon:border-cyan-500/10 flex items-center justify-between text-[10px] backdrop-blur-sm">
+                  <span className="text-slate-750 dark:text-slate-400 neon:text-cyan-400/85 font-mono uppercase tracking-wider text-[8px] flex items-center gap-1">
+                    <Flame className={`w-3.5 h-3.5 text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient} fill-current`} /> {anime.statLabel}
+                  </span>
+                  <span className={`font-black text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient} font-mono tracking-wide`}>
+                    {anime.statValue}
+                  </span>
+                </div>
+              </div>
+
+              {/* Explore Action button */}
+              <div className="mt-3 pt-2 border-t border-slate-200/45 dark:border-white/10 neon:border-cyan-955/20 flex items-center justify-between text-[9px] font-black">
+                <span className="text-slate-605 dark:text-slate-455 neon:text-cyan-350/35 uppercase tracking-widest">
+                  #{anime.id.toString().padStart(2, "0")} ARCHIVE
+                </span>
+                
+                {/* EXPLORE Button - Styled with signature border glowing shadows */}
+                <div className={`px-4 py-1.5 rounded-xl bg-slate-900/90 dark:bg-white neon:bg-cyan-950/30 text-white dark:text-slate-900 neon:text-cyan-300 border border-white/25 dark:border-transparent neon:border-cyan-500/40 hover:shadow-[0_0_12px_rgba(0,0,0,0.15)] group-hover:scale-105 active:scale-95 transition-all shadow-sm flex items-center gap-1 cursor-pointer transform-gpu`}>
+                  EXPLORE <Sparkles className={`w-3 h-3 text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient} fill-current`} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function LegacyHub() {
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<"All" | "Classics" | "Modern" | "Nostalgia">("All");
@@ -476,171 +720,11 @@ export default function LegacyHub() {
           </div>
         </div>
 
-        {/* Anime Grid list */}
+        {/* Anime Grid list (using our newly optimized, 3D dynamic tilt cards!) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <AnimatePresence mode="popLayout">
             {visibleAnime.map((anime) => (
-              <motion.div
-                key={anime.id}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="w-full h-[330px] perspective-1000 group cursor-pointer"
-              >
-                {/* Inner Wrapper (Flips on hover) */}
-                <div className="relative w-full h-full duration-700 preserve-3d group-hover:rotate-y-180 transition-transform select-none">
-                  
-                  {/* FRONT SIDE (HOLOGRAPHIC FOIL LIMITED EDITION POSTER WITH GLASS DETAILS) */}
-                  <div className={`absolute inset-0 w-full h-full rounded-3xl overflow-hidden border-2 backface-hidden shadow-md flex flex-col justify-between transform-gpu group-hover:border-transparent transition-all duration-300
-                    bg-white/90 border-slate-250
-                    dark:bg-slate-900/95 dark:border-slate-855 
-                    neon:bg-[#12002b]/95 neon:border-cyan-500/20`}>
-                    
-                    {/* Glowing outer frame halo under card */}
-                    <div className={`absolute -inset-0.5 bg-gradient-to-tr ${anime.gradient} rounded-3xl opacity-0 group-hover:opacity-45 blur-md transition-opacity duration-300 pointer-events-none transform-gpu translate-z-0`} />
-
-                    {/* Cyber futuristic tech corner indicators ([+]) */}
-                    <div className="absolute top-2 left-2 text-[9px] text-slate-400 dark:text-white/35 neon:text-white/35 font-mono pointer-events-none z-20 font-black tracking-tighter">[+]</div>
-                    <div className="absolute top-2 right-2 text-[9px] text-slate-400 dark:text-white/35 neon:text-white/35 font-mono pointer-events-none z-20 font-black tracking-tighter">[+]</div>
-
-                    {/* Background poster image (uses MyAnimeList CDN!) */}
-                    <div
-                      className="absolute inset-0 w-full h-full bg-cover bg-top select-none group-hover:scale-105 transition-transform duration-700 ease-out"
-                      style={{ backgroundImage: `url(${anime.image})` }}
-                    />
-                    
-                    {/* Holographic metallic sheen (simulates rare foil reflection sweep on hover) */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out z-20 pointer-events-none" />
-
-                    {/* Dark gradient mask to overlay text nicely */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-transparent z-10 pointer-events-none" />
-
-                    {/* Top row overlays */}
-                    <div className="relative z-20 p-4 flex items-center justify-between w-full">
-                      {/* Futuristic Glass Card Number Tag */}
-                      <div className="bg-slate-900/10 dark:bg-black/40 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-slate-900/10 dark:border-white/20 text-[10px] font-mono font-black tracking-widest text-slate-900 dark:text-white shadow-md">
-                        #{anime.id.toString().padStart(2, "0")}
-                      </div>
-
-                      {/* Floating Rating Glass Tag */}
-                      <div className="flex items-center gap-1 bg-slate-900/10 dark:bg-black/40 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-slate-900/10 dark:border-white/20 shadow-md text-slate-900 dark:text-white text-[10px] font-black tracking-wider">
-                        <Star className="w-3 h-3 text-yellow-500 dark:text-yellow-400 fill-current" />
-                        {anime.rating}
-                      </div>
-                    </div>
-
-                    {/* Bottom Glass Title Console (Floating seesha panel at the bottom of the card) */}
-                    <div className="relative z-20 m-3 p-3 text-left rounded-2xl bg-black/55 dark:bg-black/55 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
-                      <span className={`text-[8px] font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient} bg-black/60 px-2 py-0.5 rounded-md border border-white/10 shadow-sm`}>
-                        {anime.category === "Classics" ? "Shonen Legend" : anime.category === "Modern" ? "Modern Giant" : "Childhood Classic"}
-                      </span>
-                      
-                      {/* Title */}
-                      <h3 className="text-base font-black text-white leading-tight mt-1.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                        {anime.title}
-                      </h3>
-                      
-                      {/* Interactive hint */}
-                      <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] text-white/50 font-bold uppercase tracking-widest">
-                        <span>#{anime.id.toString().padStart(2, "0")} ARCHIVE</span>
-                        <span className={`text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient} font-black group-hover:scale-105 transition-transform flex items-center gap-1 animate-pulse`}>
-                          Flip Card <Sparkles className="w-3 h-3" />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* BACK SIDE (VIBRANT STYLISH GLASS SEESHA DECK PANEL) */}
-                  <div className={`absolute inset-0 w-full h-full rounded-3xl overflow-hidden p-5 rotate-y-180 backface-hidden shadow-2xl flex flex-col justify-between border backdrop-blur-xl transform-gpu transition-all duration-300
-                    bg-white/60 border-white/40 
-                    dark:bg-slate-950/45 dark:border-white/10 
-                    neon:bg-[#12002b]/40 neon:border-cyan-500/30`}>
-                    
-                    {/* Glowing background brand color accent bar */}
-                    <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${anime.gradient}`} />
-                    
-                    {/* Large Subtle Glowing Rank Watermark in background */}
-                    <div className="absolute right-4 bottom-16 text-6xl font-black opacity-[0.03] dark:opacity-[0.05] neon:opacity-[0.08] select-none pointer-events-none font-mono uppercase tracking-tighter">
-                      {anime.rank}
-                    </div>
-
-                    {/* Tech Corner Crosshairs on back side */}
-                    <div className="absolute top-2 left-2 text-[8px] text-slate-400 dark:text-white/20 neon:text-cyan-500/20 font-mono pointer-events-none z-20 font-black">[+]</div>
-                    <div className="absolute top-2 right-2 text-[8px] text-slate-400 dark:text-white/20 neon:text-cyan-500/20 font-mono pointer-events-none z-20 font-black">[+]</div>
-
-                    {/* Backdrop decorative organic gradient glows */}
-                    <div className={`absolute -right-10 -top-10 w-28 h-28 rounded-full bg-gradient-to-tr ${anime.gradient} opacity-10 dark:opacity-15 neon:opacity-20 blur-xl pointer-events-none`} />
-                    <div className={`absolute -left-10 -bottom-10 w-28 h-28 rounded-full bg-gradient-to-tr ${anime.gradient} opacity-10 dark:opacity-15 neon:opacity-20 blur-xl pointer-events-none`} />
-
-                    <div className="relative z-10 flex flex-col h-full justify-between">
-                      {/* Header */}
-                      <div>
-                        <div className="flex items-center justify-between mb-2.5">
-                          <div className="flex items-center gap-1.5">
-                            {/* Futuristic glowing Flame icon badge inside frosted glass bezel */}
-                            <div className={`w-8 h-8 rounded-lg bg-gradient-to-tr ${anime.gradient} flex items-center justify-center text-white shadow-md border border-white/25`}>
-                              <Flame className="w-4 h-4 text-white fill-current animate-pulse" />
-                            </div>
-                            <span className="text-[8px] font-mono font-black uppercase px-2 py-0.5 rounded bg-slate-900/10 dark:bg-black/40 neon:bg-[#090014]/50 text-slate-800 dark:text-slate-350 neon:text-cyan-300 border border-slate-900/10 dark:border-white/10 neon:border-cyan-555/20">
-                              {anime.rank}
-                            </span>
-                          </div>
-                          
-                          <div className="flex items-center gap-1 bg-slate-900/10 dark:bg-black/40 neon:bg-[#090014]/50 px-2 py-0.5 rounded-full border border-slate-900/10 dark:border-white/10 neon:border-cyan-500/20 text-slate-855 dark:text-slate-300 neon:text-cyan-300 text-[9px] font-black tracking-wider uppercase">
-                            <Star className="w-3 h-3 text-yellow-500 dark:text-yellow-400 neon:text-cyan-400 fill-current" />
-                            {anime.rating}
-                          </div>
-                        </div>
-
-                        {/* Title - Glowing Brand Gradient */}
-                        <h4 className={`text-base font-black leading-tight mb-2 text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient}`}>
-                          {anime.title}
-                        </h4>
-
-                        {/* Metadata tags */}
-                        <div className="flex items-center gap-1.5 flex-wrap mb-2.5 select-none">
-                          <span className="text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-slate-900/10 dark:bg-black/40 neon:bg-[#090014]/50 text-slate-750 dark:text-slate-350 neon:text-cyan-455 border border-slate-900/10 dark:border-white/10 neon:border-cyan-550/10">
-                            {anime.genre}
-                          </span>
-                          <span className="text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-md bg-slate-900/10 dark:bg-black/40 neon:bg-[#090014]/50 text-slate-605 dark:text-slate-450 neon:text-cyan-300/40 border border-slate-900/10 dark:border-white/10 neon:border-cyan-550/10">
-                            {anime.year}
-                          </span>
-                        </div>
-
-                        {/* Detailed Description Tagline */}
-                        <p className="text-slate-855 dark:text-slate-200 neon:text-cyan-100/80 text-[11px] leading-relaxed font-bold mb-3">
-                          {anime.tagline}
-                        </p>
-
-                        {/* 💎 FUTURISTIC CHARACTER BRAND STAT BADGE (Glass Console style) */}
-                        <div className="p-2 bg-slate-900/5 dark:bg-black/35 neon:bg-[#090014]/65 rounded-xl border border-slate-900/10 dark:border-white/10 neon:border-cyan-500/10 flex items-center justify-between text-[10px] backdrop-blur-sm">
-                          <span className="text-slate-750 dark:text-slate-400 neon:text-cyan-400/85 font-mono uppercase tracking-wider text-[8px] flex items-center gap-1">
-                            <Flame className={`w-3.5 h-3.5 text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient} fill-current`} /> {anime.statLabel}
-                          </span>
-                          <span className={`font-black text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient} font-mono tracking-wide`}>
-                            {anime.statValue}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Explore Action button */}
-                      <div className="mt-3 pt-2 border-t border-slate-200/45 dark:border-white/10 neon:border-cyan-950/20 flex items-center justify-between text-[9px] font-black">
-                        <span className="text-slate-605 dark:text-slate-455 neon:text-cyan-350/35 uppercase tracking-widest">
-                          #{anime.id.toString().padStart(2, "0")} ARCHIVE
-                        </span>
-                        
-                        {/* EXPLORE Button - Styled with signature border glowing shadows */}
-                        <div className={`px-4 py-1.5 rounded-xl bg-slate-900/90 dark:bg-white neon:bg-cyan-950/30 text-white dark:text-slate-900 neon:text-cyan-300 border border-white/25 dark:border-transparent neon:border-cyan-500/40 hover:shadow-[0_0_12px_rgba(0,0,0,0.15)] group-hover:scale-105 active:scale-95 transition-all shadow-sm flex items-center gap-1 cursor-pointer transform-gpu`}>
-                          EXPLORE <Sparkles className={`w-3 h-3 text-transparent bg-clip-text bg-gradient-to-r ${anime.gradient} fill-current`} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </motion.div>
+              <LegacyAnimeCard key={anime.id} anime={anime} />
             ))}
           </AnimatePresence>
         </div>
