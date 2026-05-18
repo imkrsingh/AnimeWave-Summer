@@ -5,6 +5,7 @@ import HeroSection from "@/components/HeroSection";
 const FeaturedAnime = dynamic(() => import("@/components/FeaturedAnime"), { ssr: true });
 const LegacyHub = dynamic(() => import("@/components/LegacyHub"), { ssr: true });
 const CharacterSpotlight = dynamic(() => import("@/components/CharacterSpotlight"), { ssr: true });
+const SummerChronicles = dynamic(() => import("@/components/SummerChronicles"), { ssr: true });
 const SummerRadio = dynamic(() => import("@/components/SummerRadio"), { ssr: true });
 const GallerySection = dynamic(() => import("@/components/GallerySection"), { ssr: true });
 const TrailerSection = dynamic(() => import("@/components/TrailerSection"), { ssr: true });
@@ -17,6 +18,7 @@ export default function Home() {
       <FeaturedAnime />
       <LegacyHub />
       <CharacterSpotlight />
+      <SummerChronicles />
       <SummerRadio />
       <GallerySection />
       <TrailerSection />
