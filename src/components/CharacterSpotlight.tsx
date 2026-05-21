@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Zap, Shield, Swords, Heart, X, BookOpen, Sparkles, Wand2, ChevronRight } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useAppTheme } from "@/hooks/useAppTheme";
 
 interface Character {
   id: string;
@@ -136,14 +136,7 @@ const CHARACTERS: Character[] = [
 export default function CharacterSpotlight() {
   const [activeCharId, setActiveCharId] = useState<string>("aiko");
   const [isLoreOpen, setIsLoreOpen] = useState(false);
-  const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const currentTheme = mounted ? theme : "dark";
+  const { currentTheme } = useAppTheme();
 
   const activeChar = CHARACTERS.find((char) => char.id === activeCharId) || CHARACTERS[0];
 

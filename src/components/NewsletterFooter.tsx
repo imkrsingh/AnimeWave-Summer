@@ -1,9 +1,21 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Send, Globe, MessageCircle, Share2, Camera } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, CheckCircle2 } from "lucide-react";
 
 export default function NewsletterFooter() {
+  const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setSubmitted(true);
+    setEmail("");
+    setTimeout(() => setSubmitted(false), 5000);
+  };
+
   return (
     <footer className="relative bg-sky-200 dark:bg-slate-950 neon:bg-[#090014] pt-24 pb-12 overflow-hidden transition-colors duration-300 transform-gpu">
       {/* Decorative gradient overlay */}
@@ -20,27 +32,43 @@ export default function NewsletterFooter() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-orange-400/20 dark:bg-pink-500/10 neon:bg-fuchsia-500/20 rounded-full blur-[60px] pointer-events-none transform-gpu translate-z-0"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-400/20 dark:bg-cyan-500/10 neon:bg-cyan-500/20 rounded-full blur-[60px] pointer-events-none transform-gpu translate-z-0"></div>
 
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white neon:text-cyan-50 mb-4 relative z-10">
-            Don't miss an <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-500 dark:from-pink-400 dark:to-orange-400 neon:from-cyan-400 neon:to-fuchsia-500">Episode</span>
+          <h2 className="font-display text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white neon:text-cyan-50 mb-4 relative z-10 tracking-tight">
+            Don&apos;t miss an <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-500 dark:from-pink-400 dark:to-orange-400 neon:from-cyan-400 neon:to-fuchsia-500 text-shimmer">Episode</span>
           </h2>
           <p className="text-slate-700 dark:text-slate-400 neon:text-cyan-100/70 mb-8 max-w-xl mx-auto text-lg relative z-10 font-medium">
             Subscribe to our newsletter and get exclusive summer updates, behind-the-scenes content, and early access to beach merchandise.
           </p>
 
-          <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto relative z-10" onSubmit={(e) => e.preventDefault()}>
-            <input 
-              type="email" 
-              placeholder="Enter your email address" 
+          <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto relative z-10" onSubmit={handleSubmit}>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email address"
               className="flex-1 bg-white dark:bg-slate-950/50 neon:bg-[#090014]/80 border-2 border-sky-200 dark:border-slate-700 neon:border-fuchsia-500/50 rounded-full px-6 py-4 text-slate-900 dark:text-white neon:text-cyan-50 placeholder:text-slate-400 dark:placeholder:text-slate-500 neon:placeholder:text-cyan-200/50 focus:outline-none focus:border-orange-500 dark:focus:border-pink-500 neon:focus:border-cyan-400 focus:ring-2 focus:ring-orange-200 dark:focus:ring-pink-500 transition-colors font-medium shadow-inner"
               required
             />
-            <button 
+            <button
               type="submit"
-              className="px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 dark:from-pink-500 dark:to-orange-500 neon:from-cyan-400 neon:to-fuchsia-600 rounded-full font-black text-white shadow-md hover:shadow-lg transition-shadow flex items-center justify-center gap-2 uppercase tracking-wider text-sm transform-gpu will-change-transform active:scale-95"
+              className="px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 dark:from-pink-500 dark:to-orange-500 neon:from-cyan-400 neon:to-fuchsia-600 rounded-full font-black text-white shadow-md hover:shadow-lg transition-shadow flex items-center justify-center gap-2 uppercase tracking-wider text-sm transform-gpu will-change-transform active:scale-95 cursor-pointer"
             >
               Subscribe <Send className="w-4 h-4" />
             </button>
           </form>
+
+          <AnimatePresence>
+            {submitted && (
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="mt-4 flex items-center justify-center gap-2 text-emerald-600 dark:text-emerald-400 neon:text-cyan-400 font-bold text-sm relative z-10"
+              >
+                <CheckCircle2 className="w-5 h-5" />
+                You&apos;re on the wave list! Summer updates coming soon.
+              </motion.p>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-t-2 border-sky-300/50 dark:border-white/10 neon:border-cyan-500/30 pt-8 transition-colors duration-300">

@@ -3,23 +3,23 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { Sun, Moon, Zap, Waves, Menu, X } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useAppTheme } from "@/hooks/useAppTheme";
 
 const NAV_ITEMS = [
   { label: "Trending", href: "#trending" },
-  { label: "Archive", href: "#archive" },
-  { label: "Heroes", href: "#spotlight" },
-  { label: "Story", href: "#story" },
-  { label: "Radio", href: "#radio" },
+  { label: "Tonight", href: "#tonight" },
+  { label: "VS", href: "#versus" },
+  { label: "Party", href: "#watchparty" },
+  { label: "Ranks", href: "#leaderboard" },
+  { label: "Moments", href: "#moments" },
   { label: "Quiz", href: "#quiz" },
-  { label: "Gallery", href: "#wallpapers" }
 ];
 
 export default function FloatingNavbar() {
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { currentTheme, setTheme } = useAppTheme();
   
   // Track scroll progress for the top thin indicator
   const { scrollYProgress } = useScroll();
@@ -52,8 +52,6 @@ export default function FloatingNavbar() {
 
   if (!mounted) return null;
 
-  const currentTheme = theme || "dark";
-
   const toggleTheme = () => {
     if (currentTheme === "light") setTheme("dark");
     else if (currentTheme === "dark") setTheme("neon");
@@ -83,12 +81,12 @@ export default function FloatingNavbar() {
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-full max-w-5xl bg-white/40 dark:bg-slate-950/40 neon:bg-[#090014]/40 backdrop-blur-md border border-white/20 dark:border-slate-800/80 neon:border-cyan-500/30 rounded-full py-2.5 px-6 flex items-center justify-between shadow-[0_10px_30px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.3)] neon:shadow-[0_0_15px_rgba(34,211,238,0.15)] transform-gpu"
+          className="w-full max-w-5xl bg-white/55 dark:bg-slate-950/55 neon:bg-[#090014]/55 backdrop-blur-xl border border-white/30 dark:border-slate-700/80 neon:border-cyan-500/40 rounded-full py-2.5 px-6 flex items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.35)] neon:shadow-[0_0_25px_rgba(34,211,238,0.2)] transform-gpu"
         >
           {/* Logo */}
           <a href="#" className="flex items-center gap-2 cursor-pointer group">
             <Waves className="w-6 h-6 text-orange-500 dark:text-pink-400 neon:text-cyan-400 group-hover:rotate-12 transition-transform duration-300" />
-            <span className="font-black text-lg md:text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-200 neon:from-cyan-400 neon:to-fuchsia-400">
+            <span className="font-display font-extrabold text-lg md:text-xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-200 neon:from-cyan-400 neon:to-fuchsia-400">
               AnimeWave<span className="text-orange-500 dark:text-pink-400 neon:text-cyan-300 text-sm font-black align-super">.</span>
             </span>
           </a>

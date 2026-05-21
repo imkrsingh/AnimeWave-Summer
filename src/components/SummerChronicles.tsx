@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Compass, Flame, Shield, Sun, Sparkles, MapPin, Users, Activity, ChevronDown } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useAppTheme } from "@/hooks/useAppTheme";
 
 const CHRONICLES_DATA = [
   {
@@ -70,14 +70,7 @@ const CHRONICLES_DATA = [
 
 export default function SummerChronicles() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const currentTheme = mounted ? theme : "dark";
+  const { currentTheme } = useAppTheme();
 
   const initialItems = CHRONICLES_DATA.slice(0, 2);
   const hiddenItems = CHRONICLES_DATA.slice(2);

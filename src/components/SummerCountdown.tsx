@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Clock } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useAppTheme } from "@/hooks/useAppTheme";
 
 export default function SummerCountdown() {
   const [timeLeft, setTimeLeft] = useState({
@@ -13,11 +13,9 @@ export default function SummerCountdown() {
     seconds: 0
   });
 
-  const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { currentTheme } = useAppTheme();
 
   useEffect(() => {
-    setMounted(true);
     const targetDate = new Date("2026-07-15T00:00:00").getTime();
 
     const interval = setInterval(() => {
@@ -43,8 +41,6 @@ export default function SummerCountdown() {
     { label: "Minutes", value: timeLeft.minutes },
     { label: "Seconds", value: timeLeft.seconds },
   ];
-
-  const currentTheme = mounted ? theme : 'dark';
 
   return (
     <section id="event" className="py-24 bg-sky-200 dark:bg-slate-950 neon:bg-[#090014] relative overflow-hidden flex items-center justify-center transition-colors duration-300 transform-gpu">
@@ -110,9 +106,11 @@ export default function SummerCountdown() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="mt-12 px-10 py-5 bg-gradient-to-r from-cyan-400 to-blue-500 dark:from-cyan-500 dark:to-blue-500 neon:from-fuchsia-500 neon:to-purple-600 rounded-full font-black text-white shadow-md hover:shadow-lg transition-transform uppercase tracking-wider text-sm transform-gpu will-change-transform"
+            type="button"
+            onClick={() => document.querySelector("#schedule")?.scrollIntoView({ behavior: "smooth" })}
+            className="mt-12 px-10 py-5 bg-gradient-to-r from-cyan-400 to-blue-500 dark:from-cyan-500 dark:to-blue-500 neon:from-fuchsia-500 neon:to-purple-600 rounded-full font-black text-white shadow-md hover:shadow-lg transition-transform uppercase tracking-wider text-sm transform-gpu will-change-transform cursor-pointer"
           >
-            Get Tickets Now
+            View Broadcast Schedule
           </motion.button>
         </motion.div>
       </div>

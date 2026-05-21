@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { Play, Pause, SkipForward, SkipBack, Volume2, Music, Radio, Loader2 } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useAppTheme } from "@/hooks/useAppTheme";
 
 declare global {
   interface Window {
@@ -86,11 +86,10 @@ export default function SummerRadio() {
   const [isBuffering, setIsBuffering] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const { theme } = useTheme();
+  const { currentTheme } = useAppTheme();
   const playerRef = useRef<any>(null);
 
   const currentTrack = TRACKS[currentTrackIndex];
-  const currentTheme = mounted ? theme : 'dark';
 
   // Load YouTube script & initialize player
   useEffect(() => {

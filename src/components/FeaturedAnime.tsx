@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Star, PlayCircle, Sun } from "lucide-react";
+import GenreFilter, { type AnimeItem } from "@/components/GenreFilter";
 
-const ANIME_LIST = [
+const ANIME_LIST: AnimeItem[] = [
   {
     id: 1,
     title: "Summer Days with You",
@@ -57,8 +58,8 @@ export default function FeaturedAnime() {
             <div className="flex items-center gap-2 mb-2 text-orange-500 neon:text-cyan-400 font-bold uppercase tracking-wider text-sm">
               <Sun className="w-5 h-5" /> Hot Releases
             </div>
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white neon:text-cyan-50 mb-4">
-              Trending <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-500 dark:from-orange-400 dark:to-pink-500 neon:from-cyan-400 neon:to-fuchsia-500">This Summer</span>
+            <h2 className="font-display text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white neon:text-cyan-50 mb-4 tracking-tight">
+              Trending <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-500 dark:from-orange-400 dark:to-pink-500 neon:from-cyan-400 neon:to-fuchsia-500 text-shimmer">This Summer</span>
             </h2>
             <p className="text-slate-600 dark:text-slate-400 neon:text-cyan-100/70 max-w-2xl text-lg font-medium">
               Check out the most anticipated shows dropping this sunny season. Grab an ice cream and dive in!
@@ -69,26 +70,30 @@ export default function FeaturedAnime() {
           </button>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {ANIME_LIST.map((anime, index) => (
+        <GenreFilter
+          animeList={ANIME_LIST}
+          renderCard={(anime, index) => (
             <motion.div
               key={anime.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: index * 0.1, duration: 0.4 }}
-              className="group relative rounded-3xl overflow-hidden bg-sky-50 dark:bg-slate-900 neon:bg-[#12002b] border-2 border-sky-100 dark:border-slate-800 neon:border-fuchsia-900 hover:border-orange-400 dark:hover:border-pink-500/50 neon:hover:border-cyan-400 transition-colors duration-300 shadow-lg transform-gpu"
+              className="group card-glow relative rounded-3xl overflow-hidden bg-sky-50 dark:bg-slate-900 neon:bg-[#12002b] border-2 border-sky-100 dark:border-slate-800 neon:border-fuchsia-900 hover:border-orange-400 dark:hover:border-pink-500/50 neon:hover:border-cyan-400 transition-colors duration-300 shadow-lg transform-gpu hover:-translate-y-1"
             >
+              <div className="absolute top-4 left-4 z-30 w-10 h-10 rounded-full bg-white/90 dark:bg-black/70 neon:bg-[#090014]/80 backdrop-blur-sm border border-white/50 dark:border-white/10 neon:border-cyan-500/40 flex items-center justify-center font-display font-extrabold text-lg text-orange-500 dark:text-pink-400 neon:text-cyan-400 shadow-md">
+                {String(index + 1).padStart(2, "0")}
+              </div>
               <div className="relative h-[400px] w-full overflow-hidden transform-gpu">
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 neon:from-[#090014] via-slate-900/40 neon:via-[#090014]/40 to-transparent z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 neon:from-[#090014] via-slate-900/50 neon:via-[#090014]/50 to-transparent z-10"></div>
+                <div className="absolute inset-0 z-[15] opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-orange-500/20 via-transparent to-cyan-500/20 dark:from-pink-500/20 neon:from-cyan-500/25 neon:to-fuchsia-500/20 pointer-events-none" />
                 <img
                   src={anime.image}
                   alt={anime.title}
                   loading="lazy"
                   className="w-full h-full object-cover transform-gpu group-hover:scale-105 transition-transform duration-500 ease-out will-change-transform"
                 />
-                
-                {/* Rating Badge */}
+
                 <div className="absolute top-4 right-4 z-20 flex items-center gap-1 bg-white/90 dark:bg-black/60 neon:bg-fuchsia-900/40 backdrop-blur-sm px-3 py-1.5 rounded-full border border-yellow-400/30 dark:border-white/10 neon:border-cyan-400/50 shadow-sm">
                   <Star className="w-4 h-4 text-yellow-500 dark:text-yellow-400 neon:text-cyan-400 fill-yellow-500 dark:fill-yellow-400 neon:fill-cyan-400" />
                   <span className="text-slate-900 dark:text-white neon:text-cyan-100 font-bold text-sm">{anime.rating}</span>
@@ -105,14 +110,18 @@ export default function FeaturedAnime() {
                 <p className="text-sky-100 dark:text-slate-300 neon:text-cyan-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2 font-medium">
                   {anime.description}
                 </p>
-                
-                <button className="mt-4 w-full py-3 rounded-xl bg-orange-500 hover:bg-orange-600 dark:bg-white/10 dark:hover:bg-pink-500 neon:bg-[#090014] neon:border neon:border-cyan-400 neon:hover:bg-cyan-400 neon:text-cyan-400 neon:hover:text-[#090014] text-white dark:text-pink-400 dark:hover:text-white font-bold transition-colors duration-300 opacity-0 group-hover:opacity-100">
+
+                <button
+                  type="button"
+                  onClick={() => document.querySelector("#trailers")?.scrollIntoView({ behavior: "smooth" })}
+                  className="mt-4 w-full py-3 rounded-xl bg-orange-500 hover:bg-orange-600 dark:bg-white/10 dark:hover:bg-pink-500 neon:bg-[#090014] neon:border neon:border-cyan-400 neon:hover:bg-cyan-400 neon:text-cyan-400 neon:hover:text-[#090014] text-white dark:text-pink-400 dark:hover:text-white font-bold transition-colors duration-300 opacity-0 group-hover:opacity-100 cursor-pointer"
+                >
                   Watch Now
                 </button>
               </div>
             </motion.div>
-          ))}
-        </div>
+          )}
+        />
       </div>
     </section>
   );

@@ -5,6 +5,140 @@
 
 @theme inline {
   --font-sans: var(--font-outfit), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-display: var(--font-syne), var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Ambient floating orbs */
+@keyframes float-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(24px, -18px) scale(1.05); }
+  66% { transform: translate(-16px, 12px) scale(0.97); }
+}
+.ambient-orb {
+  animation: float-orb 14s ease-in-out infinite;
+}
+
+/* Hero background slow zoom */
+@keyframes ken-burns {
+  0% { transform: scale(1) translateZ(0); }
+  100% { transform: scale(1.08) translateZ(0); }
+}
+.hero-ken-burns {
+  animation: ken-burns 22s ease-in-out infinite alternate;
+}
+
+/* Shimmer on gradient text */
+@keyframes shimmer-slide {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.text-shimmer {
+  background-size: 200% auto;
+  animation: shimmer-slide 6s linear infinite;
+}
+
+/* Subtle film grain */
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* Card hover glow */
+.card-glow {
+  transition: box-shadow 0.4s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+.card-glow:hover {
+  box-shadow:
+    0 0 0 1px rgba(249, 115, 22, 0.25),
+    0 20px 50px -12px rgba(249, 115, 22, 0.2),
+    0 8px 24px -8px rgba(0, 0, 0, 0.15);
+}
+.dark .card-glow:hover {
+  box-shadow:
+    0 0 0 1px rgba(236, 72, 153, 0.35),
+    0 20px 50px -12px rgba(236, 72, 153, 0.25),
+    0 8px 24px -8px rgba(0, 0, 0, 0.4);
+}
+.neon .card-glow:hover {
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.5),
+    0 0 40px -8px rgba(34, 211, 238, 0.35),
+    0 20px 50px -12px rgba(192, 38, 211, 0.3);
+}
+
+/* CTA pulse ring */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.45); }
+  70% { box-shadow: 0 0 0 14px rgba(249, 115, 22, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+}
+.dark .btn-pulse:hover {
+  animation: pulse-ring-dark 1.5s ease-out infinite;
+}
+@keyframes pulse-ring-dark {
+  0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.45); }
+  70% { box-shadow: 0 0 0 14px rgba(236, 72, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
+}
+.neon .btn-pulse:hover {
+  animation: pulse-ring-neon 1.5s ease-out infinite;
+}
+@keyframes pulse-ring-neon {
+  0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(34, 211, 238, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+}
+.btn-pulse:hover {
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+/* Stat card animated border */
+@keyframes border-spin {
+  to { --angle: 360deg; }
+}
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.stat-card-border {
+  background: linear-gradient(var(--angle), #f97316, #ec4899, #eab308, #f97316);
+  animation: border-spin 4s linear infinite;
+}
+.dark .stat-card-border {
+  background: linear-gradient(var(--angle), #ec4899, #f97316, #a855f7, #ec4899);
+}
+.neon .stat-card-border {
+  background: linear-gradient(var(--angle), #22d3ee, #c026d3, #a855f7, #22d3ee);
+}
+
+/* Section wave divider */
+.wave-divider {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 48' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' d='M0 32L60 28C120 24 240 16 360 18.7C480 21 600 35 720 37.3C840 40 960 32 1080 26.7C1200 21 1320 19 1380 18.7L1440 18.7V48H0Z'/%3E%3C/svg%3E");
+  background-size: 100% 48px;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  height: 48px;
+}
+.dark .wave-divider {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 48' preserveAspectRatio='none'%3E%3Cpath fill='%23020617' d='M0 32L60 28C120 24 240 16 360 18.7C480 21 600 35 720 37.3C840 40 960 32 1080 26.7C1200 21 1320 19 1380 18.7L1440 18.7V48H0Z'/%3E%3C/svg%3E");
+}
+.neon .wave-divider {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 48' preserveAspectRatio='none'%3E%3Cpath fill='%23090014' d='M0 32L60 28C120 24 240 16 360 18.7C480 21 600 35 720 37.3C840 40 960 32 1080 26.7C1200 21 1320 19 1380 18.7L1440 18.7V48H0Z'/%3E%3C/svg%3E");
+}
+
+/* 3D tilt on promo cards */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.35s ease;
+}
+.tilt-card:hover {
+  transform: perspective(800px) rotateX(2deg) rotateY(-2deg) translateY(-4px);
 }
 
 /* Custom Scrollbar */
@@ -51,4 +185,41 @@
 }
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+/* Text selection per theme */
+::selection {
+  background: #fdba74;
+  color: #0f172a;
+}
+.dark ::selection {
+  background: #ec4899;
+  color: #f8fafc;
+}
+.neon ::selection {
+  background: #22d3ee;
+  color: #090014;
+}
+
+/* Focus visible for keyboard users */
+:focus-visible {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+.dark :focus-visible {
+  outline-color: #ec4899;
+}
+.neon :focus-visible {
+  outline-color: #22d3ee;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
