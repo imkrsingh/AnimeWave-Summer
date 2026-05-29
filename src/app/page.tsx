@@ -15,22 +15,22 @@ const GallerySection = dynamic(() => import("@/components/GallerySection"), { ss
 const TrailerSection = dynamic(() => import("@/components/TrailerSection"), { ssr: true });
 const NewsletterFooter = dynamic(() => import("@/components/NewsletterFooter"), { ssr: true });
 const StatsMarquee = dynamic(() => import("@/components/StatsMarquee"), { ssr: true });
-const SummerCountdown = dynamic(() => import("@/components/SummerCountdown"), { ssr: true });
 const SummerSchedule = dynamic(() => import("@/components/SummerSchedule"), { ssr: true });
 const LiveNowBanner = dynamic(() => import("@/components/LiveNowBanner"), { ssr: true });
 const FanHypeWall = dynamic(() => import("@/components/FanHypeWall"), { ssr: true });
 const SummerMomentsBento = dynamic(() => import("@/components/SummerMomentsBento"), { ssr: true });
 const SeasonPassPromo = dynamic(() => import("@/components/SeasonPassPromo"), { ssr: true });
 const TonightPicks = dynamic(() => import("@/components/TonightPicks"), { ssr: true });
-const SummerLeaderboard = dynamic(() => import("@/components/SummerLeaderboard"), { ssr: true });
 const StudioAllies = dynamic(() => import("@/components/StudioAllies"), { ssr: true });
 const MerchDrop = dynamic(() => import("@/components/MerchDrop"), { ssr: true });
 const VoiceLineSpotlight = dynamic(() => import("@/components/VoiceLineSpotlight"), { ssr: true });
 const EpisodeAlertToast = dynamic(() => import("@/components/EpisodeAlertToast"), { ssr: true });
-const AnimeVersusArena = dynamic(() => import("@/components/AnimeVersusArena"), { ssr: true });
 const OpeningThemesCarousel = dynamic(() => import("@/components/OpeningThemesCarousel"), { ssr: true });
-const SummerWatchParty = dynamic(() => import("@/components/SummerWatchParty"), { ssr: true });
-const SummerVibesPicker = dynamic(() => import("@/components/SummerVibesPicker"), { ssr: true });
+const AnimeReviewWall = dynamic(() => import("@/components/AnimeReviewWall"), { ssr: true });
+const WatchlistBuilder = dynamic(() => import("@/components/WatchlistBuilder"), { ssr: true });
+const EpisodeCalendar = dynamic(() => import("@/components/EpisodeCalendar"), { ssr: true });
+const ArtGallerySpotlight = dynamic(() => import("@/components/ArtGallerySpotlight"), { ssr: true });
+
 
 export default function Home() {
   return (
@@ -44,20 +44,19 @@ export default function Home() {
       <FeaturedAnime />
       <FanHypeWall />
       <TonightPicks />
-      <SummerVibesPicker />
-      <AnimeVersusArena />
-      <SummerCountdown />
       <SummerSchedule />
       <StudioAllies />
-      <SummerLeaderboard />
       <OpeningThemesCarousel />
-      <SummerWatchParty />
+      <EpisodeCalendar />
+      <WatchlistBuilder />
       <LegacyHub />
       <CharacterSpotlight />
       <SummerMomentsBento />
+      <ArtGallerySpotlight />
       <SeasonPassPromo />
       <VoiceLineSpotlight />
       <SummerChronicles />
+      <AnimeReviewWall />
       <SummerRadio />
       <NostalgiaSoundboard />
       <SummerQuiz />
