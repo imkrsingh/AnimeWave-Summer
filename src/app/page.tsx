@@ -30,6 +30,9 @@ const AnimeReviewWall = dynamic(() => import("@/components/AnimeReviewWall"), { 
 const WatchlistBuilder = dynamic(() => import("@/components/WatchlistBuilder"), { ssr: true });
 const EpisodeCalendar = dynamic(() => import("@/components/EpisodeCalendar"), { ssr: true });
 const ArtGallerySpotlight = dynamic(() => import("@/components/ArtGallerySpotlight"), { ssr: true });
+const AnimeRecommendations = dynamic(() => import("@/components/AnimeRecommendations"), { ssr: true });
+const SummerFestivalCountdown = dynamic(() => import("@/components/SummerFestivalCountdown"), { ssr: true });
+const TopAnimeRankings = dynamic(() => import("@/components/TopAnimeRankings"), { ssr: true });
 
 
 export default function Home() {
@@ -40,8 +43,11 @@ export default function Home() {
       <HeroSection />
       <div className="wave-divider -mt-px relative z-10" aria-hidden />
       <StatsMarquee />
+      <SummerFestivalCountdown />
       <LiveNowBanner />
       <FeaturedAnime />
+      <TopAnimeRankings />
+      <AnimeRecommendations />
       <FanHypeWall />
       <TonightPicks />
       <SummerSchedule />
